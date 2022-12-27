@@ -21,8 +21,8 @@ ChartJS.register(
 );
 
 const MyChartComponent = ({ data }) => {
-    console.log("Im alive");
-    console.log("data", data);
+    console.log("MyChartComponent rendered");
+    console.log("Chart data", data);
     const chartData = {
         labels: data.map(item => item.date), // use the dates as the labels
         datasets: [
