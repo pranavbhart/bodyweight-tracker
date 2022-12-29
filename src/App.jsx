@@ -42,17 +42,40 @@ function App() {
     setWeights(newArray);
   }
 
+  const handleFileUpload = (event) => {
+    if (confirm("Are you sure you want to overwrite your current weights?")) {
+      const file = document.getElementById('file-selector').files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const newWeightsArray = JSON.parse(event.target.result);
+        setWeights(newWeightsArray);
+      };
+      reader.readAsText(file);
+    }
+    else {
+      console.log("File upload cancelled");
+    }
+    event.target.value = null;
+  }
+
   return (
     <div>
       <h1>Weight Tracker</h1>
       <MyChartComponent data={weightsArray} />
 
       <p>date</p>
+      {/*TODO: use forms for inputs */}
       <input id='datePicker' type="date" value={date} onChange={e => setDate(e.target.value)}/>
       <p>weight</p>
       <input type="number" value={weightValue} onChange={e => setWeightValue(e.target.value)} />
-      <button onClick={handleAdd}>add</button>
-
+      <button onClick={handleAdd} style={{marginBottom: "2em"}}>add</button>
+      <br/>
+      <a download="weights.json"
+         href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(weightsArray))}`}>Download weights</a>
+      <br/>
+      <label htmlFor="file-selector">Load weights from file: </label>
+      <input type="file" id="file-selector" style={{marginBottom: "2em"}} />
+      <button id='upload-file-btn' onClick={handleFileUpload}>upload</button>
       <ul>
           {weightsArray.map((weightItem, index) => (
             <div key={index} className='weightInfo'>

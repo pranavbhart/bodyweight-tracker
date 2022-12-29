@@ -69,3 +69,11 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* TODO: fix me */
+input[type="file" i] {
+  margin-right: 0.5em;
+  padding: 0;
+  border: 0;
+}
+
