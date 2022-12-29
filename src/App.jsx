@@ -3,18 +3,25 @@ import MyChartComponent from './MyChartComponent';
 import './App.css'
 
 function App() {
+  const today = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month}-${day}`;
+  }
 
-  const [date, setDate] = useState('');
-  const [weightValue, setWeightValue] = useState(0);
-  const [weightsArray, pushWeightToState] = useState(localStorage.getItem('weightsArray') ? JSON.parse(localStorage.getItem('weightsArray')) : []);
+  const [date, setDate] = useState(today);
+  const [weightsArray, setWeights] = useState(localStorage.getItem('weightsArray') ? JSON.parse(localStorage.getItem('weightsArray')) : []);
+  const [weightValue, setWeightValue] = useState(weightsArray[weightsArray.length - 1] ? weightsArray[weightsArray.length - 1].weight : 0);
 
   useEffect(() => {
     localStorage.setItem('weightsArray', JSON.stringify(weightsArray))
   }, [weightsArray]);
 
   const handleAdd = () => {
-    if (date === '' || weightValue === 0) {
-      alert("Date or weight is empty");
+    if (weightValue === 0) {
+      alert("Weight is empty");
       return;
     }
     const foundIndex = weightsArray.findIndex((item) => item.date === date);
@@ -22,30 +29,30 @@ function App() {
       alert("Overwriting existing weight");
       const newWeightsArray = [...weightsArray];
       newWeightsArray[foundIndex] = {date, weight: weightValue};
-      pushWeightToState(newWeightsArray);
+      setWeights(newWeightsArray);
     }
     else {
-      pushWeightToState([...weightsArray, {date, weight: weightValue}]
+      setWeights([...weightsArray, {date, weight: weightValue}]
         .sort((a, b) => new Date(a.date) - new Date(b.date)));
     }
   }
 
   const handleDelete = (index) => {
     const newArray = weightsArray.filter((item, i) => i !== index);
-    pushWeightToState(newArray);
+    setWeights(newArray);
   }
 
   return (
-
     <div>
       <h1>Weight Tracker</h1>
       <MyChartComponent data={weightsArray} />
 
       <p>date</p>
-      <input type="date" value={date} onChange={e => setDate(e.target.value)}/>
+      <input id='datePicker' type="date" value={date} onChange={e => setDate(e.target.value)}/>
       <p>weight</p>
       <input type="number" value={weightValue} onChange={e => setWeightValue(e.target.value)} />
       <button onClick={handleAdd}>add</button>
+
       <ul>
           {weightsArray.map((weightItem, index) => (
             <div key={index} className='weightInfo'>
