@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import MyChartComponent from './MyChartComponent';
 import './App.css'
 
@@ -6,7 +6,11 @@ function App() {
 
   const [date, setDate] = useState('');
   const [weightValue, setWeightValue] = useState(0);
-  const [weightsArray, pushWeightToState] = useState([]);
+  const [weightsArray, pushWeightToState] = useState(localStorage.getItem('weightsArray') ? JSON.parse(localStorage.getItem('weightsArray')) : []);
+
+  useEffect(() => {
+    localStorage.setItem('weightsArray', JSON.stringify(weightsArray))
+  }, [weightsArray]);
 
   const handleAdd = () => {
     if (date === '' || weightValue === 0) {
