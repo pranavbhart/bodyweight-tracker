@@ -65,7 +65,7 @@ function App() {
 
       <p>date</p>
       {/*TODO: use forms for inputs */}
-      <input id='datePicker' type="date" value={date} onChange={e => setDate(e.target.value)}/>
+      <input id='datePicker' type="date" value={date} max={today()} onChange={e => setDate(e.target.value)}/>
       <p>weight</p>
       <input type="number" value={weightValue} onChange={e => setWeightValue(e.target.value)} />
       <button onClick={handleAdd} style={{marginBottom: "2em"}}>add</button>
